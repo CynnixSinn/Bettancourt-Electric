@@ -49,19 +49,19 @@ body {
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 15%; /* Slightly Lighter Navy for popovers */
     --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%; /* Vibrant Blue - Deep Blue Contrast */
+    --primary: 231 48% 48%; /* Deep Blue #3F51B5 */
     --primary-foreground: 210 40% 98%; /* Almost White for text on primary */
     --secondary: 222 47% 22%; /* Darker Navy for secondary elements */
     --secondary-foreground: 210 40% 90%; /* Lighter text for secondary */
     --muted: 222 47% 20%; /* Muted Navy */
     --muted-foreground: 210 40% 60%; /* Muted light text */
-    --accent: 200 80% 65%; /* Lighter, Brighter Blue accent */
-    --accent-foreground: 222 47% 11%; /* Dark Navy text on accent */
+    --accent: 260 44% 70%; /* Purple #7E57C2 */
+    --accent-foreground: 0 0% 100%; /* White */
     --destructive: 0 72% 51%; /* Desaturated Red for destructive actions */
     --destructive-foreground: 0 0% 98%; /* Light text on destructive */
     --border: 222 47% 25%; /* Navy border */
     --input: 222 47% 25%; /* Navy input background */
-    --ring: 217 91% 60%; /* Vibrant Blue for focus rings */
+    --ring: 231 48% 48%; /* Deep Blue #3F51B5 for focus rings */
     --chart-1: 217 91% 60%; /* Primary Blue */
     --chart-2: 200 80% 65%; /* Accent Blue */
     --chart-3: 210 40% 70%; /* Lighter Gray/Blue */
@@ -69,12 +69,12 @@ body {
     --chart-5: 30 80% 70%; /* Muted Orange */
     --sidebar-background: 222 47% 9%; /* Even Darker Navy for Sidebar */
     --sidebar-foreground: 210 40% 90%; /* Light text for Sidebar */
-    --sidebar-primary: 217 91% 60%; /* Primary Blue for Sidebar actions */
+    --sidebar-primary: 231 48% 48%; /* Deep Blue for Sidebar primary actions */
     --sidebar-primary-foreground: 210 40% 98%; /* Light text on Sidebar primary */
     --sidebar-accent: 222 47% 18%; /* Subtle Navy Accent for Sidebar */
     --sidebar-accent-foreground: 210 40% 98%; /* Light text on Sidebar accent */
     --sidebar-border: 222 47% 20%; /* Sidebar border color */
-    --sidebar-ring: 217 91% 60%; /* Sidebar ring color (same as primary) */
+    --sidebar-ring: 231 48% 48%; /* Sidebar ring color (Deep Blue) */
   }
 }
 
