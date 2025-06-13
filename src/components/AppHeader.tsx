@@ -5,7 +5,7 @@ export default function AppHeader() {
     <header className="bg-primary text-primary-foreground p-4 shadow-md">
       <div className="container mx-auto flex items-center">
         <Image
-          src="https://placehold.co/200x50.png"
+          src="/logo.png"
           alt="Bettancourt Electric Logo"
           width={200}
           height={50}
