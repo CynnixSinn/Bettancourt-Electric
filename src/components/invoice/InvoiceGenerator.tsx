@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -16,6 +17,7 @@ import type { WorkOrder, CustomerInfo, PartCost } from '@/lib/types';
 import { generateInvoice, type GenerateInvoiceInput } from '@/ai/flows/invoice-generator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+const MANUAL_ENTRY_VALUE = "__manual_entry__";
 
 const partCostSchema = z.object({
   partName: z.string().min(1, "Part name is required"),
@@ -60,7 +62,7 @@ export default function InvoiceGenerator({ workOrders, onInvoiceGenerated }: Inv
   const selectedWorkOrderId = watch('selectedWorkOrderId');
 
   useEffect(() => {
-    if (selectedWorkOrderId) {
+    if (selectedWorkOrderId && selectedWorkOrderId !== MANUAL_ENTRY_VALUE) {
       const wo = workOrders.find(w => w.id === selectedWorkOrderId);
       if (wo) {
         setValue('customerName', wo.customerDetails.name);
@@ -76,9 +78,15 @@ export default function InvoiceGenerator({ workOrders, onInvoiceGenerated }: Inv
         setValue('laborEstimate', wo.laborEstimate ?? 0);
         setValue('taxRate', wo.taxRate ?? 0.08);
       }
-    } else {
-      // Optionally reset to defaults if no work order is selected, or leave as is
-      // reset(); // This would clear the form fully
+    } else if (selectedWorkOrderId === MANUAL_ENTRY_VALUE) {
+      // Optionally, reset fields if "None (Manual Entry)" is explicitly chosen after a WO was selected.
+      // For now, it keeps the current values, allowing manual override.
+      // If a full reset to blank is desired here, uncomment and adjust:
+      // reset({
+      //   customerName: '', customerEmail: '', customerPhone: '', customerAddress: '',
+      //   jobSummary: '', partCosts: [{ partName: '', cost: 0, quantity: 1 }],
+      //   laborEstimate: 0, taxRate: 0.08, selectedWorkOrderId: MANUAL_ENTRY_VALUE,
+      // });
     }
   }, [selectedWorkOrderId, workOrders, setValue, reset]);
 
@@ -97,8 +105,6 @@ export default function InvoiceGenerator({ workOrders, onInvoiceGenerated }: Inv
     const invoiceInput: GenerateInvoiceInput = {
       customerInfo,
       jobSummary: data.jobSummary,
-      // Map quantity into partCosts for AI. AI schema doesn't have quantity, so we sum it.
-      // Or, better, the AI prompt should be able to handle quantity. Assuming it can:
       partCosts: data.partCosts.map(p => ({ partName: p.partName, cost: p.cost * p.quantity })),
       laborEstimate: data.laborEstimate,
       taxRate: data.taxRate,
@@ -108,7 +114,7 @@ export default function InvoiceGenerator({ workOrders, onInvoiceGenerated }: Inv
       const result = await generateInvoice(invoiceInput);
       setGeneratedInvoice({ text: result.invoice, total: result.totalAmount, customerName: data.customerName, date: new Date() });
       toast({ title: 'Invoice Generated Successfully' });
-      if (data.selectedWorkOrderId && onInvoiceGenerated) {
+      if (data.selectedWorkOrderId && data.selectedWorkOrderId !== MANUAL_ENTRY_VALUE && onInvoiceGenerated) {
         onInvoiceGenerated(data.selectedWorkOrderId, result.invoice, result.totalAmount);
       }
     } catch (error) {
@@ -138,7 +144,7 @@ export default function InvoiceGenerator({ workOrders, onInvoiceGenerated }: Inv
                             <SelectValue placeholder="Select a work order to pre-fill data" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="">None (Manual Entry)</SelectItem>
+                            <SelectItem value={MANUAL_ENTRY_VALUE}>None (Manual Entry)</SelectItem>
                             {workOrders.map(wo => (
                                 <SelectItem key={wo.id} value={wo.id}>
                                     Job ID: {wo.id.substring(0,8)}... - {wo.customerDetails.name} - {wo.jobDescription.substring(0,30)}...
