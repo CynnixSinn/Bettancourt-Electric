@@ -43,38 +43,38 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 220 10% 10%; /* Dark Gray for dark mode */
-    --foreground: 0 0% 98%; /* Light text for dark mode */
-    --card: 220 10% 15%; /* Slightly lighter dark gray for cards */
-    --card-foreground: 0 0% 98%;
-    --popover: 220 10% 15%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 231 48% 58%; /* Lighter Deep Blue for dark mode */
-    --primary-foreground: 0 0% 10%; /* Dark text on lighter blue */
-    --secondary: 220 10% 25%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 10% 25%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 260 44% 75%; /* Lighter Purple for dark mode */
-    --accent-foreground: 0 0% 10%; /* Dark text on lighter purple */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 10% 30%;
-    --input: 220 10% 30%;
-    --ring: 231 48% 58%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 222 47% 11%; /* Dark Navy Blue */
+    --foreground: 210 40% 98%; /* Almost White */
+    --card: 222 47% 15%; /* Slightly Lighter Navy for cards */
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 15%; /* Slightly Lighter Navy for popovers */
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%; /* Vibrant Blue - Deep Blue Contrast */
+    --primary-foreground: 210 40% 98%; /* Almost White for text on primary */
+    --secondary: 222 47% 22%; /* Darker Navy for secondary elements */
+    --secondary-foreground: 210 40% 90%; /* Lighter text for secondary */
+    --muted: 222 47% 20%; /* Muted Navy */
+    --muted-foreground: 210 40% 60%; /* Muted light text */
+    --accent: 200 80% 65%; /* Lighter, Brighter Blue accent */
+    --accent-foreground: 222 47% 11%; /* Dark Navy text on accent */
+    --destructive: 0 72% 51%; /* Desaturated Red for destructive actions */
+    --destructive-foreground: 0 0% 98%; /* Light text on destructive */
+    --border: 222 47% 25%; /* Navy border */
+    --input: 222 47% 25%; /* Navy input background */
+    --ring: 217 91% 60%; /* Vibrant Blue for focus rings */
+    --chart-1: 217 91% 60%; /* Primary Blue */
+    --chart-2: 200 80% 65%; /* Accent Blue */
+    --chart-3: 210 40% 70%; /* Lighter Gray/Blue */
+    --chart-4: 260 60% 75%; /* Muted Purple */
+    --chart-5: 30 80% 70%; /* Muted Orange */
+    --sidebar-background: 222 47% 9%; /* Even Darker Navy for Sidebar */
+    --sidebar-foreground: 210 40% 90%; /* Light text for Sidebar */
+    --sidebar-primary: 217 91% 60%; /* Primary Blue for Sidebar actions */
+    --sidebar-primary-foreground: 210 40% 98%; /* Light text on Sidebar primary */
+    --sidebar-accent: 222 47% 18%; /* Subtle Navy Accent for Sidebar */
+    --sidebar-accent-foreground: 210 40% 98%; /* Light text on Sidebar accent */
+    --sidebar-border: 222 47% 20%; /* Sidebar border color */
+    --sidebar-ring: 217 91% 60%; /* Sidebar ring color (same as primary) */
   }
 }
 
