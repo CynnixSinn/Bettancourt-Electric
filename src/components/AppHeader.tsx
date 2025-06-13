@@ -1,11 +1,17 @@
-import { Building } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AppHeader() {
   return (
     <header className="bg-primary text-primary-foreground p-4 shadow-md">
       <div className="container mx-auto flex items-center">
-        <Building className="h-8 w-8 mr-3" />
-        <h1 className="text-2xl font-bold font-headline">FieldFlow</h1>
+        <Image
+          src="https://placehold.co/200x50.png"
+          alt="Bettancourt Electric Logo"
+          width={200}
+          height={50}
+          data-ai-hint="company logo"
+          priority
+        />
       </div>
     </header>
   );

@@ -8,7 +8,7 @@ import JobCalendarView from '@/components/calendar/JobCalendarView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WorkOrder } from '@/lib/types';
-import { ListChecks, FileText, CalendarDays, Edit2 } from 'lucide-react';
+import { ListChecks, FileText, CalendarDays, Edit2, PlusCircleIcon as LucidePlusCircleIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -115,7 +115,7 @@ export default function HomePage() {
                 <div className="flex justify-between items-center">
                   <CardTitle>Existing Work Orders</CardTitle>
                   <Button variant="outline" onClick={handleCreateNewWorkOrder}>
-                     <PlusCircleIcon className="mr-2 h-4 w-4" /> Create New Order
+                     <LucidePlusCircleIcon className="mr-2 h-4 w-4" /> Create New Order
                   </Button>
                 </div>
                 <CardDescription>Manage and view details of all work orders.</CardDescription>
@@ -170,30 +170,8 @@ export default function HomePage() {
         </Tabs>
       </main>
       <footer className="text-center p-4 text-sm text-muted-foreground border-t">
-        © {new Date().getFullYear()} FieldFlow. All rights reserved.
+        © {new Date().getFullYear()} Bettancourt Electric. All rights reserved.
       </footer>
     </div>
   );
-}
-
-// Helper icon, can be moved to its own file or use lucide-react if available and preferred
-function PlusCircleIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" x2="12" y1="8" y2="16" />
-      <line x1="8" x2="16" y1="12" y2="12" />
-    </svg>
-  )
 }
