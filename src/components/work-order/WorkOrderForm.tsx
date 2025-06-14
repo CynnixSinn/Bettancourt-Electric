@@ -46,7 +46,7 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [currentWorkOrderId, setCurrentWorkOrderId] = useState<string | null>(null);
 
-  const { register, handleSubmit, control, reset, setValue, watch, formState: { errors } } = useForm<WorkOrderFormData>({
+  const { register, handleSubmit, control, reset, setValue, watch, formState: { errors }, getValues } = useForm<WorkOrderFormData>({
     resolver: zodResolver(workOrderSchema),
     defaultValues: {
       urgency: 'Medium',
@@ -92,12 +92,11 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
           
           setValue('jobDescription', result.jobDescription || getValues('jobDescription'));
           setValue('location', result.location || getValues('location'));
-          // Assuming urgency from AI is compatible or needs mapping
+          
           if (result.urgency && ['Low', 'Medium', 'High'].includes(result.urgency)) {
              setValue('urgency', result.urgency as Urgency);
           }
-          // The AI returns `customerDetails` as a string. We will put this in a notes field or append to job description.
-          // For now, appending to job description if it exists.
+          
           if (result.customerDetails) {
             setValue('jobDescription', `${getValues('jobDescription')}\n\nCustomer Notes (from voice): ${result.customerDetails}`);
           }
@@ -118,14 +117,6 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
     }
   };
   
-  const getValues = (field: keyof WorkOrderFormData) => {
-    const methods = control_methods; // Quick fix to get methods, ideally use getValues from useForm
-    if (methods) return methods.getValues(field);
-    return '';
-  };
-  const { control: control_methods } = useForm<WorkOrderFormData>(); // Temporary fix
-
-
   const onSubmit = (data: WorkOrderFormData) => {
     const customerDetails: CustomerInfo = {
       name: data.customerName,
@@ -143,7 +134,6 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
       status: selectedWorkOrder?.status || 'New',
       createdAt: selectedWorkOrder?.createdAt || new Date(),
       deadline: data.deadline,
-      // Retain existing analysis data if updating
       analyzedPartList: selectedWorkOrder?.analyzedPartList,
       analyzedJobDuration: selectedWorkOrder?.analyzedJobDuration,
       analyzedToolsNeeded: selectedWorkOrder?.analyzedToolsNeeded,
@@ -155,12 +145,11 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
       toast({ title: 'Work Order Updated', description: `Job ID: ${workOrder.id}` });
     } else {
       onWorkOrderCreated(workOrder);
-      setCurrentWorkOrderId(workOrder.id); // Store ID for potential analysis
+      setCurrentWorkOrderId(workOrder.id); 
       toast({ title: 'Work Order Created', description: `Job ID: ${workOrder.id}` });
     }
-    // Don't reset form if updating, allow further actions like analysis
     if (!selectedWorkOrder) {
-       reset(); // Reset form after creation
+       reset(); 
     }
   };
 
@@ -170,27 +159,35 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
       return;
     }
 
-    const targetWorkOrder = selectedWorkOrder || { // Construct minimal data for analysis if not fully selected
+    const currentFormData = getValues();
+    const targetWorkOrderData = selectedWorkOrder || {
       id: currentWorkOrderId!,
-      customerDetails: { name: getValues('customerName'), email: getValues('customerEmail'), phone: getValues('customerPhone'), address: getValues('customerAddress') },
-      jobDescription: getValues('jobDescription'),
-      urgency: getValues('urgency') as Urgency,
-      location: getValues('location'),
+      customerDetails: { 
+        name: currentFormData.customerName, 
+        email: currentFormData.customerEmail, 
+        phone: currentFormData.customerPhone, 
+        address: currentFormData.customerAddress 
+      },
+      jobDescription: currentFormData.jobDescription,
+      urgency: currentFormData.urgency as Urgency,
+      location: currentFormData.location,
+      createdAt: new Date(), // Default if new
+      status: 'New', // Default if new
     };
     
     setIsAnalyzing(true);
     try {
       const analysisInput: AnalyzeWorkOrderInput = {
-        jobDescription: targetWorkOrder.jobDescription,
-        customerDetails: `${targetWorkOrder.customerDetails.name}, ${targetWorkOrder.customerDetails.address}`, // AI expects string
-        urgency: targetWorkOrder.urgency,
-        location: targetWorkOrder.location,
+        jobDescription: targetWorkOrderData.jobDescription,
+        customerDetails: `${targetWorkOrderData.customerDetails.name}, ${targetWorkOrderData.customerDetails.address}`,
+        urgency: targetWorkOrderData.urgency,
+        location: targetWorkOrderData.location,
       };
       const analysisResult = await analyzeWorkOrder(analysisInput);
 
       if (onWorkOrderUpdated && (selectedWorkOrder || currentWorkOrderId)) {
          const updatedWorkOrder : WorkOrder = {
-            ...(selectedWorkOrder || targetWorkOrder), // base
+            ...targetWorkOrderData, 
             id: selectedWorkOrder?.id || currentWorkOrderId!,
             analyzedPartList: analysisResult.partList,
             analyzedJobDuration: analysisResult.jobDurationEstimate,
@@ -199,18 +196,23 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
             status: 'Analyzed'
          };
          onWorkOrderUpdated(updatedWorkOrder);
+         // If we are editing an existing order, update the form to show analysis results.
+         if (selectedWorkOrder) {
+           setValue('jobDescription', updatedWorkOrder.jobDescription); // In case AI modified it
+         }
       }
 
       toast({ 
         title: 'Job Analysis Successful', 
         description: (
-          <div>
+          <div className="text-sm">
             <p><strong>Parts:</strong> {analysisResult.partList}</p>
-            <p><strong>Duration:</strong> {analysisResult.jobDurationEstimate}</p>
+            <p><strong>Est. Duration:</strong> {analysisResult.jobDurationEstimate}</p>
             <p><strong>Tools:</strong> {analysisResult.toolsNeeded}</p>
             <p><strong>Man Hours:</strong> {analysisResult.manHoursNeeded}</p>
           </div>
-        )
+        ),
+        duration: 9000,
       });
     } catch (error) {
       console.error('Error analyzing job:', error);
@@ -265,7 +267,7 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
                 name="urgency"
                 control={control}
                 render={({ field }) => (
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                     <SelectTrigger id="urgency">
                       <SelectValue placeholder="Select urgency" />
                     </SelectTrigger>
@@ -320,7 +322,7 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
               Voice Input (Optional)
             </Label>
             <div className="flex items-center gap-2">
-              <Input id="audioFile" type="file" accept="audio/*" onChange={handleAudioFileChange} className="flex-grow" />
+              <Input id="audioFile" type="file" accept="audio/*" onChange={handleAudioFileChange} className="flex-grow" disabled={isTranscribing || isAnalyzing} />
               {isTranscribing && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
             </div>
             {audioFile && <p className="text-sm text-muted-foreground">Selected: {audioFile.name}</p>}
@@ -344,7 +346,7 @@ export default function WorkOrderForm({ onWorkOrderCreated, selectedWorkOrder, o
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 pt-6">
           {(currentWorkOrderId || selectedWorkOrder) && (
-             <Button type="button" variant="outline" onClick={handleAnalyzeJob} disabled={isAnalyzing || isTranscribing}>
+             <Button type="button" variant="outline" onClick={handleAnalyzeJob} disabled={isAnalyzing || isTranscribing || !getValues('jobDescription')}>
               {isAnalyzing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UploadCloud className="mr-2 h-4 w-4" />}
               Analyze Job
             </Button>

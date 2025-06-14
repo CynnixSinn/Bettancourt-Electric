@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer base {
   :root {
     --background: 220 13% 94%; /* Light Gray #F0F2F5 */
@@ -50,7 +46,7 @@ body {
     --popover: 222 47% 15%; /* Slightly Lighter Navy for popovers */
     --popover-foreground: 210 40% 98%;
     --primary: 231 48% 48%; /* Deep Blue #3F51B5 */
-    --primary-foreground: 210 40% 98%; /* Almost White for text on primary */
+    --primary-foreground: 0 0% 100%; /* White for text on primary */
     --secondary: 222 47% 22%; /* Darker Navy for secondary elements */
     --secondary-foreground: 210 40% 90%; /* Lighter text for secondary */
     --muted: 222 47% 20%; /* Muted Navy */

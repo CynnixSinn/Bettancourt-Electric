@@ -8,7 +8,7 @@ import JobCalendarView from '@/components/calendar/JobCalendarView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WorkOrder } from '@/lib/types';
-import { ListChecks, FileText, CalendarDays, Edit2, PlusCircleIcon as LucidePlusCircleIcon } from 'lucide-react';
+import { ListChecks, FileText, CalendarDays, Edit2, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -46,18 +46,19 @@ export default function HomePage() {
   const handleWorkOrderCreated = (newOrder: WorkOrder) => {
     setWorkOrders(prevOrders => [...prevOrders, newOrder]);
     setSelectedWorkOrderForEditing(null); // Clear editing state
+    // Optionally switch to view orders tab or keep on create form for analysis
+    // setActiveTab("view-orders"); 
   };
   
   const handleWorkOrderUpdated = (updatedOrder: WorkOrder) => {
     setWorkOrders(prevOrders => 
       prevOrders.map(wo => wo.id === updatedOrder.id ? updatedOrder : wo)
     );
-    // If the updated order is the one being edited, update it, otherwise clear editing state
+    // If the updated order is the one being edited, update it in the state.
     if (selectedWorkOrderForEditing?.id === updatedOrder.id) {
       setSelectedWorkOrderForEditing(updatedOrder);
-    } else {
-       setSelectedWorkOrderForEditing(null); 
     }
+     // No need to clear selectedWorkOrderForEditing here if we want to keep editing/analyzing
   };
 
   const handleInvoiceGeneratedForWorkOrder = (workOrderId: string, invoiceText: string, totalAmount: number) => {
@@ -68,6 +69,10 @@ export default function HomePage() {
           : wo
       )
     );
+    // If the invoiced order was being edited, update its state
+    if (selectedWorkOrderForEditing?.id === workOrderId) {
+      setSelectedWorkOrderForEditing(prev => prev ? {...prev, invoiceText, invoiceTotalAmount: totalAmount, status: 'Invoiced'} : null);
+    }
   };
 
   const handleEditWorkOrder = (workOrder: WorkOrder) => {
@@ -115,7 +120,7 @@ export default function HomePage() {
                 <div className="flex justify-between items-center">
                   <CardTitle>Existing Work Orders</CardTitle>
                   <Button variant="outline" onClick={handleCreateNewWorkOrder}>
-                     <LucidePlusCircleIcon className="mr-2 h-4 w-4" /> Create New Order
+                     <PlusCircle className="mr-2 h-4 w-4" /> Create New Order
                   </Button>
                 </div>
                 <CardDescription>Manage and view details of all work orders.</CardDescription>
@@ -148,6 +153,12 @@ export default function HomePage() {
                                 </Badge>
                                 <Badge variant="outline">{wo.status}</Badge>
                              </div>
+                             {wo.analyzedPartList && (
+                               <div className="mt-2 pt-2 border-t border-dashed text-xs text-muted-foreground">
+                                 <p><strong>Analyzed Parts:</strong> {wo.analyzedPartList}</p>
+                                 <p><strong>Est. Duration:</strong> {wo.analyzedJobDuration}</p>
+                               </div>
+                             )}
                           </CardContent>
                         </Card>
                       ))}
