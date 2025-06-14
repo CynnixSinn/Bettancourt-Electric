@@ -12,6 +12,7 @@ import { ListChecks, FileText, CalendarDays, Edit2, PlusCircle } from 'lucide-re
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import AiChatArea from '@/components/AiChatArea'; // Import the new component
 
 export default function HomePage() {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
@@ -90,6 +91,11 @@ export default function HomePage() {
       <AppHeader />
       <main className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {/* AI Chat Area */}
+          <div className="fixed bottom-4 right-4 z-50 w-full max-w-sm">
+            <AiChatArea onWorkOrderCreated={handleWorkOrderCreated} />
+          </div>
+
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
             <TabsTrigger value="create-order">
               <ListChecks className="mr-2 h-4 w-4" /> {selectedWorkOrderForEditing ? 'Edit Order' : 'New Work Order'}

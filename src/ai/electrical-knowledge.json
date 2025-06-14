@@ -1,0 +1,78 @@
+{
+  "electricalKnowledge": {
+    "commonProblems": [
+      {
+        "problem": "Lights not working in one room",
+        "diagnoses": [
+          {
+            "diagnosis": "Tripped circuit breaker",
+            "materials": ["None (reset breaker)"]
+          },
+          {
+            "diagnosis": "Blown fuse",
+            "materials": ["Replacement fuse (appropriate amperage)"]
+          },
+          {
+            "diagnosis": "Faulty light switch",
+            "materials": ["Replacement light switch"]
+          },
+          {
+            "diagnosis": "Loose wiring connection",
+            "materials": ["Wire connectors", "Electrical tape"]
+          }
+        ]
+      },
+      {
+        "problem": "Outlet not working",
+        "diagnoses": [
+          {
+            "diagnosis": "Tripped GFCI outlet",
+            "materials": ["None (reset GFCI)"]
+          },
+          {
+            "diagnosis": "Tripped circuit breaker",
+            "materials": ["None (reset breaker)"]
+          },
+          {
+            "diagnosis": "Faulty outlet",
+            "materials": ["Replacement outlet"]
+          },
+          {
+            "diagnosis": "Loose wiring connection",
+            "materials": ["Wire connectors", "Electrical tape"]
+          }
+        ]
+      },
+      {
+        "problem": "Flickering lights",
+        "diagnoses": [
+          {
+            "diagnosis": "Loose bulb",
+            "materials": ["None (tighten bulb)"]
+          },
+          {
+            "diagnosis": "Voltage fluctuations",
+            "materials": ["Voltage regulator (if necessary)"]
+          },
+          {
+            "diagnosis": "Faulty dimmer switch",
+            "materials": ["Replacement dimmer switch"]
+          },
+          {
+            "diagnosis": "Loose wiring connection",
+            "materials": ["Wire connectors", "Electrical tape"]
+          }
+        ]
+      }
+    ],
+    "materials": [
+      {"name": "Wire connectors", "unit": "piece"},
+      {"name": "Electrical tape", "unit": "roll"},
+      {"name": "Replacement light switch", "unit": "piece"},
+      {"name": "Replacement outlet", "unit": "piece"},
+      {"name": "Replacement fuse", "unit": "piece"},
+      {"name": "Voltage regulator", "unit": "piece"},
+      {"name": "Replacement dimmer switch", "unit": "piece"}
+    ]
+  }
+}
